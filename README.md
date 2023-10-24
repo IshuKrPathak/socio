@@ -43,7 +43,7 @@ Socio is a social platform for developers .
 
 ### Tech Stack <a name="tech-stack"></a>
 
-The Tech stack for this project include Typescript ,Nextjs ,Next.js Auth, Prisma,Tailwind CSS, PostgreSQL .
+The Tech stack for this project include Typescript ,Nextjs ,Next.js Auth,Vine.js , Prisma,Tailwind CSS, PostgreSQL .
 
 
 
