@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import logo from "../../../../public/assets/logo.png";
 import { Label } from "@/components/ui/label";
@@ -8,33 +8,48 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import axios from "axios";
-
+import { signIn } from "next-auth/react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 const Login = () => {
   const params = useSearchParams();
+  const { status } = useSession();
+  const router = useRouter();
   const [authState, setAuthState] = useState<AuthStateType>({
     email: "",
     password: "",
   });
   const [errors, setErrors] = useState<AuthErrorType>({});
   const [loading, setLoading] = useState<boolean>(false);
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.push("/");
+    }
+  }, [status]);
+
   const submit = (event: React.FormEvent) => {
     event.preventDefault();
-    axios.post("/api/auth/login",authState)
-    .then((res) => {
-      setLoading(false);
-      const response = res.data;
-      if (response.status == 200) {
-        alert("Success logged in ")
-        
-      } else if (response.status == 400) {
-        setErrors(response.errors);
-      }
-    })
-    .catch((err) => {
-      setLoading(false);
-      console.log("The error is ", err);
-    });
-};
+    axios
+      .post("/api/auth/login", authState)
+      .then((res) => {
+        setLoading(false);
+        const response = res.data;
+        if (response.status == 200) {
+          signIn("credentials", {
+            email: authState.email,
+            password: authState.password,
+            callbackUrl: "/",
+            redirect: true,
+          });
+        } else if (response.status == 400) {
+          setErrors(response.errors);
+        }
+      })
+      .catch((err) => {
+        setLoading(false);
+        console.log("The error is ", err);
+      });
+  };
   return (
     <div bg-background>
       <div className=" h-screen w-screen flex justify-center items-center">
@@ -42,9 +57,12 @@ const Login = () => {
           <div className=" flex justify-center ">
             <Image src={logo} width={190} height={190} alt="LOGO" />
           </div>
-          {params.get("message")? (<div className=" bg-green-500 p-4 rounded-lg my-4">
-            <strong>Success! </strong>{params.get("message")}
-          </div>):(
+          {params.get("message") ? (
+            <div className=" bg-green-500 p-4 rounded-lg my-4">
+              <strong>Success! </strong>
+              {params.get("message")}
+            </div>
+          ) : (
             <></>
           )}
 
@@ -71,11 +89,13 @@ const Login = () => {
                   setAuthState({ ...authState, password: e.target.value })
                 }
               ></Input>
-              <span className="text-red-400  font-bold">{errors?.password}</span>
+              <span className="text-red-400  font-bold">
+                {errors?.password}
+              </span>
             </div>
             <div className=" mt-5">
               <Button className="w-full" onClick={submit} disabled={loading}>
-                {loading?"Processing...":"Login"}
+                {loading ? "Processing..." : "Login"}
               </Button>
             </div>
           </form>
