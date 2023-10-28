@@ -1,7 +1,18 @@
 <a name="readme-top"></a>
 <div align="center">
 
-![logo](https://github.com/IshuKrPathak/socio/assets/77011944/e4f825e2-9462-4750-b8ca-ba7b2a2aa1eb)
+
+
+
+
+
+
+
+![logo](https://github.com/IshuKrPathak/socio/assets/77011944/c8d9cbf1-1eda-4321-a94e-017a137d2a84)
+
+
+
+
 
 
 
