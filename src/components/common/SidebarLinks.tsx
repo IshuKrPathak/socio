@@ -4,6 +4,7 @@ import { Bell, Home, Search, User2 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { Button } from "../ui/button";
 import ThemeToggleBtn from "./ThemeToggleBtn";
+import SignOutBtn from "./SignOutBtn";
 const SidebarLinks = () => {
   const pathName = usePathname();
   return (
@@ -56,10 +57,7 @@ const SidebarLinks = () => {
         className=" flex items-center absolute bottom-5
         "
       >
-        <Button size="sm" className="mr-10 ">
-          {" "}
-          Sign Out{" "}
-        </Button>
+        <SignOutBtn />
         <ThemeToggleBtn />
       </li>
     </ul>
